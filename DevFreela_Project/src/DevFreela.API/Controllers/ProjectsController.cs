@@ -1,41 +1,52 @@
 ﻿using DevFreela.API.Models;
+using DevFreela.Application.InputModels;
+using DevFreela.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace DevFreela.API.Controllers
 {
     [Route("api/projects")]
     public class ProjectsController : ControllerBase
     {
-        private readonly OppeningTimeOption _option;
-        public ProjectsController(IOptions<OppeningTimeOption> option)
+        private readonly IProjectService _service;
+        public ProjectsController(IProjectService service)
         {
-            _option = option.Value;
+            _service = service;
         }
 
         [HttpGet]
         public IActionResult Get(string query)
         {
-            return StatusCode(200);
+            var projects = _service.GetAll(query);
+            return StatusCode(200, projects);
         }
 
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            return StatusCode(200);
+            var project = _service.GetById(id);
+            if (project == null) return StatusCode(404);
+
+            return StatusCode(200, project);
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] CreateProjectModel createProject)
+        public IActionResult Post([FromBody] CreateProjectInputModel createProject)
         {
             if (createProject.Title.Length > 50) return StatusCode(400);
-            return StatusCode(201, (nameof(GetById), new { id = createProject.Id }, createProject));
+
+            var id = _service.Create(createProject);
+
+            return StatusCode(201, (nameof(GetById), new { id = id }, createProject));
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] UpdateProjectModel updateProject)
+        public IActionResult Put(int id, [FromBody] UpdateProjectInputModel updateProject)
         {
             if (updateProject.Description.Length > 200) return StatusCode(400);
+
+            _service.Update(updateProject);
+
             return StatusCode(204);
         }
 
@@ -44,24 +55,30 @@ namespace DevFreela.API.Controllers
         {
             var project = GetById(id);
             if (project == null) return StatusCode(404);
+
+            _service.Delete(id);
+
             return StatusCode(204);
         }
 
         [HttpPost("{id}/comments")]
-        public IActionResult PostComment(int id, [FromBody] CreateCommentModel createComment)
+        public IActionResult PostComment(int id, [FromBody] CreateCommentInputModel createComment)
         {
+            _service.CreateComment(createComment);
             return StatusCode(204);
         }
 
         [HttpPut("{id}/start")]
         public IActionResult Start(int id)
         {
+            _service.Start(id);
             return StatusCode(204);
         }
 
         [HttpPut("{id}/finish")]
         public IActionResult Finish(int id)
         {
+            _service.Finish(id);
             return StatusCode(204);
         }
     }

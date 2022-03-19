@@ -23,11 +23,20 @@ namespace DevFreela.Core.Entities
 
         public string FullName { get; private set; }
         public string Email { get; private set; }
+        public string Password { get; set; }
         public DateTime BirthDate { get; private set; }
         public DateTime CreatedAt { get; private set; }
         public bool Active { get;  set; }
         public List<UserSkill> Skills { get; private set; }
         public List<Project> OwnedProjects { get; set; }
         public List<Project> FreelanceProjects { get; set; }
+
+        public void Update(string fullName, string email, string password, DateTime birthDate)
+        {
+            FullName = fullName;
+            Email = email;
+            Password = password;
+            BirthDate = birthDate;
+        }
     }
 }
