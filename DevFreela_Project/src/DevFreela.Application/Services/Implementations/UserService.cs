@@ -18,11 +18,12 @@ namespace DevFreela.Application.Services.Implementations
             var user = new User(inputModel.FullName, inputModel.Email, inputModel.BirthDate);
 
             _context.Users.Add(user);
+            _context.SaveChanges();
 
             return user.Id;
         }
 
-        public UserViewModel GetUser(int id)
+        public UserViewModel GetById(int id)
         {
             var user = _context.Users.SingleOrDefault(u => u.Id == id);
 
@@ -37,7 +38,9 @@ namespace DevFreela.Application.Services.Implementations
         public void Update(UpdateUserInputModel inputModel)
         {
             var user = _context.Users.SingleOrDefault(p => p.Id == inputModel.Id);
-            user.Update(inputModel.Title, inputModel.Description, inputModel.TotalCost);
+            user.Update(inputModel.FullName, inputModel.Email, inputModel.Password, inputModel.BirthDate);
+            
+            _context.SaveChanges();
         }
     }
 }
