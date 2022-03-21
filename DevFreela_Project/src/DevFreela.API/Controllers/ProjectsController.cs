@@ -1,6 +1,8 @@
 ﻿using DevFreela.API.Models;
+using DevFreela.Application.Commands.CreateProject;
 using DevFreela.Application.InputModels;
 using DevFreela.Application.Services.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevFreela.API.Controllers
@@ -9,9 +11,14 @@ namespace DevFreela.API.Controllers
     public class ProjectsController : ControllerBase
     {
         private readonly IProjectService _service;
-        public ProjectsController(IProjectService service)
+        private readonly IMediator _mediator;
+        public ProjectsController(
+            IProjectService service,
+            IMediator mediator
+            )
         {
             _service = service;
+            _mediator = mediator;
         }
 
         [HttpGet]
@@ -31,13 +38,14 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] CreateProjectInputModel createProject)
+        public async Task<IActionResult> Post([FromBody] CreateProjectCommand command)
         {
-            if (createProject.Title.Length > 50) return StatusCode(400);
+            if (command.Title.Length > 50) return StatusCode(400);
 
-            var id = _service.Create(createProject);
+            //var id = _service.Create(createProject);
+            var id = await _mediator.Send(command);
 
-            return StatusCode(201, (nameof(GetById), new { id = id }, createProject));
+            return StatusCode(201, (nameof(GetById), new { id = id }, command));
         }
 
         [HttpPut("{id}")]
