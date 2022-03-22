@@ -1,4 +1,6 @@
+using DevFreela.Application.Commands.CreateComment;
 using DevFreela.Application.Commands.CreateProject;
+using DevFreela.Application.Commands.DeleteProject;
 using DevFreela.Application.Services.Implementations;
 using DevFreela.Application.Services.Interfaces;
 using DevFreela.Infrastructure.Persistence;
@@ -29,6 +31,8 @@ builder.Services.AddScoped<ISkillService, SkillService>();
 builder.Services.AddControllers();
 
 builder.Services.AddMediatR(typeof(CreateProjectCommand).Assembly);
+builder.Services.AddMediatR(typeof(CreateCommentCommand).Assembly);
+builder.Services.AddMediatR(typeof(DeleteProjectCommand).Assembly);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
