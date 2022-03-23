@@ -22,7 +22,6 @@ builder.Services.AddDbContext<DevFreelaDbContext>(options => options.UseInMemory
 //Services
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ISkillService, SkillService>();
 
 //Repositories
 //builder.Services.AddScoped<IProjectRepository, ProjectRepository>();

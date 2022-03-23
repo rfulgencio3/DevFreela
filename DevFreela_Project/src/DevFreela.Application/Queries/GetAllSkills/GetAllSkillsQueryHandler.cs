@@ -24,6 +24,15 @@ namespace DevFreela.Application.Queries.GetAllSkills
                 
                 return skills.ToList();
             }
+
+            //with EF Core
+            //var skills = _context.Skills;
+
+            //var skillsviewModel = skills
+            //    .Select(s => new SkillViewModel(s.Id, s.Description))
+            //    .ToList();
+            
+            //return skillsViewModel;
         }
     }
 }

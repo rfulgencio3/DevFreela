@@ -14,14 +14,14 @@ namespace DevFreela.Application.Services.Implementations
         {
             _context = context;
         }
-        public List<ProjectViewModel> GetAll(string query)
-        {
-            var projects = _context.Projects;
-            var projectsViewModel = projects
-                .Select(p => new ProjectViewModel(p.Id, p.Title, p.CreatedAt))
-                .ToList();
-            return projectsViewModel;
-        }
+        //public List<ProjectViewModel> GetAll(string query)
+        //{
+        //    var projects = _context.Projects;
+        //    var projectsViewModel = projects
+        //        .Select(p => new ProjectViewModel(p.Id, p.Title, p.CreatedAt))
+        //        .ToList();
+        //    return projectsViewModel;
+        //}
 
         public ProjectDetailsViewModel GetById(int id)
         {
