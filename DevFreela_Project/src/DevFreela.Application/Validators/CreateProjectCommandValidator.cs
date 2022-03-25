@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace DevFreela.Application.Validators
 {
-    public class CreateProjecCommandValidator : AbstractValidator<CreateProjectCommand>
+    public class CreateProjectCommandValidator : AbstractValidator<CreateProjectCommand>
     {
-        public CreateProjecCommandValidator()
+        public CreateProjectCommandValidator()
         {
             RuleFor(p => p.Title)
                 .NotEmpty()
