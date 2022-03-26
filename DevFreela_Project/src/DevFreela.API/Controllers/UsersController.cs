@@ -1,5 +1,6 @@
 ﻿using DevFreela.API.Models;
 using DevFreela.Application.Commands.CreateUser;
+using DevFreela.Application.Commands.LoginUser;
 using DevFreela.Application.Queries.GetUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -42,11 +43,13 @@ namespace DevFreela.API.Controllers
 
         // api/users/1/login
         [HttpPut("{id}/login")]
-        public IActionResult Login(int id, [FromBody] LoginModel login)
+        public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
         {
-            // TODO: Para Módulo de Autenticação e Autorização
+            var loginUserViewModel = await _mediator.Send(command);
 
-            return StatusCode(204);
+            if (loginUserViewModel == null) return StatusCode(404);
+
+            return StatusCode(200, loginUserViewModel);
         }
     }
 }
