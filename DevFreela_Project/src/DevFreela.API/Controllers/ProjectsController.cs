@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace DevFreela.API.Controllers
 {
     [Route("api/projects")]
-    [Authorize]
     public class ProjectsController : ControllerBase
     {
         private readonly IProjectService _service;
@@ -26,6 +25,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "client, freelancer")]
         public async Task<IActionResult> Get(string query)
         {
             var getAllProjectsQuery = new GetAllProjectsQuery();
@@ -37,6 +37,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "client, freelancer")]
         public IActionResult GetById(int id)
         {
             var project = _service.GetById(id);
@@ -46,6 +47,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "client")]
         public async Task<IActionResult> Post([FromBody] CreateProjectCommand command)
         {
            
@@ -56,6 +58,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "client")]
         public async Task<IActionResult> Put(int id, [FromBody] UpdateProjectInputModel command)
         {
             if (command.Description.Length > 200) return StatusCode(400);
@@ -66,6 +69,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "client")]
         public async Task<IActionResult> Delete(int id)
         {
             var project = GetById(id);
@@ -78,6 +82,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPost("{id}/comments")]
+        [Authorize(Roles = "client, freelancer")]
         public IActionResult PostComment(int id, [FromBody] CreateCommentCommand createComment)
         {
             _mediator.Send(createComment);
@@ -85,6 +90,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPut("{id}/start")]
+        [Authorize(Roles = "client")]
         public IActionResult Start(int id)
         {
             _service.Start(id);
@@ -92,6 +98,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPut("{id}/finish")]
+        [Authorize(Roles = "client")]
         public IActionResult Finish(int id)
         {
             _service.Finish(id);
