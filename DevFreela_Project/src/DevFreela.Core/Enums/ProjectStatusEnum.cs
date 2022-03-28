@@ -12,6 +12,7 @@ namespace DevFreela.Core.Enums
         InProgress = 1,
         Suspended = 2,
         Cancelled = 3,
-        Finisehd = 4
+        Finisehd = 4,
+        PaymentPending = 5
     }
 }
