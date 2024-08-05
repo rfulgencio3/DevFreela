@@ -1,4 +1,5 @@
 using DevFreela.API.Filters;
+using DevFreela.API.Models;
 using DevFreela.Application.Commands.CreateComment;
 using DevFreela.Application.Commands.CreateProject;
 using DevFreela.Application.Commands.DeleteProject;
@@ -24,6 +25,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 IConfiguration Configuration = builder.Configuration;
 //builder.Services.Configure<OppeningTimeOption>(Configuration.GetSection("OppeningTime"));
+//builder.Services.Configure<FreelanceTotalCostConfig>(Configuration.GetSection("FreelanceTotalCostConfig"));
 
 //var connectionString = Configuration.GetConnectionString("DevFreelaCs");
 

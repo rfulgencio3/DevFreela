@@ -6,54 +6,65 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DevFreela.API.Controllers
+namespace DevFreela.API.Controllers;
+
+[Route("api/users")]
+[Authorize]
+public class UsersController : ControllerBase
 {
-    [Route("api/users")]
-    [Authorize]
-    public class UsersController : ControllerBase
+    private readonly IMediator _mediator;
+    public UsersController(IMediator mediator)
     {
-        private readonly IMediator _mediator;
-        public UsersController(IMediator mediator)
+        _mediator = mediator;
+    }
+
+    // api/users/1
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var query = new GetUserQuery(id);
+
+        var user = await _mediator.Send(query);
+
+        if (user == null)
         {
-            _mediator = mediator;
+            return StatusCode(404);
         }
 
-        // api/users/1
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
-        {
-            var query = new GetUserQuery(id);
+        return Ok(user);
+    }
 
-            var user = await _mediator.Send(query);
+    // api/users
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task<IActionResult> Post([FromBody] CreateUserCommand command)
+    {
+        var id = await _mediator.Send(command);
 
-            if (user == null)
-            {
-                return StatusCode(404);
-            }
+        return CreatedAtAction(nameof(GetById), new { id = id }, command);
+    }
 
-            return Ok(user);
-        }
+    // api/users/1/login
+    [HttpPut("{id}/login")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
+    {
+        var loginUserViewModel = await _mediator.Send(command);
 
-        // api/users
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> Post([FromBody] CreateUserCommand command)
-        {
-            var id = await _mediator.Send(command);
+        if (loginUserViewModel == null) return StatusCode(404);
 
-            return CreatedAtAction(nameof(GetById), new { id = id }, command);
-        }
+        return StatusCode(200, loginUserViewModel);
+    }
 
-        // api/users/1/login
-        [HttpPut("{id}/login")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
-        {
-            var loginUserViewModel = await _mediator.Send(command);
+    // api/users/1/profile-picture
+    [HttpPut("{id}/profile-picture")]
+    [AllowAnonymous]
+    public async Task<IActionResult> PostProfilePicture(IFormFile file)
+    {
+        var description = $"File: {file.FileName}, Size: {file.Length}";
 
-            if (loginUserViewModel == null) return StatusCode(404);
+        //Armazenar imagem no banco
 
-            return StatusCode(200, loginUserViewModel);
-        }
+        return StatusCode(201, description);
     }
 }

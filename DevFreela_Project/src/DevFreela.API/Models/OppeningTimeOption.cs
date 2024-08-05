@@ -1,8 +1,7 @@
-﻿namespace DevFreela.API.Models
+﻿namespace DevFreela.API.Models;
+
+public class OppeningTimeOption
 {
-    public class OppeningTimeOption
-    {
-        public TimeSpan StartAt { get; set; }
-        public TimeSpan FinishAt { get; set; }
-    }
+    public TimeSpan StartAt { get; set; }
+    public TimeSpan FinishAt { get; set; }
 }
